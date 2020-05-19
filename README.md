@@ -8,4 +8,7 @@
 
 ## 调整更新策略为ChangeDetectionStrategy.OnPush
 - 将组件的更新策略调整为ChangeDetectionStrategy.OnPush后，angular将失去对大部分情况属性值改变的响应，比如setTimeout等异步事件、xhr请求等事件。这种时候如果需要将更改后的数据更新到界面上，需要依赖注入ChangeDetectorRef类型实例，调用ChangeDetectorRef.markForCheck()方法才行。
-- 但是OnPush策略下，也并不是所有情况都需要调用ChangeDetectorRef.markForCheck()方法才能将数据更新到界面上。当@Input()的值改变时会自动触发angular的检测机制。当模板中的一些事件(比如click)被触发时，也会触发angular的检测机制。
+- 但是OnPush策略下，也并不是所有情况都需要调用ChangeDetectorRef.markForCheck()方法才能将数据更新到界面上。当@Input()输入的值在父组件中被改变时会自动触发angular的检测机制。当模板中的一些事件(比如click)被触发时，也会触发angular的检测机制。
+- 但是要注意的时，当将一个组件的更新策略调整为ChangeDetectionStrategy.OnPush时，其子组件的更新策略也会变成ChangeDetectionStrategy.OnPush。
+
+## 通过zone.js捕获属性值的更新，并及时更新到界面上很方便。但是当数据量很多的时候，或者项目越大的时候，就可能导致性能问题。此时，可通过NgZone.runOutsideAngular()方法或者调整组件的更新策略为ChangeDetectionStrategy.OnPush来提高性能
